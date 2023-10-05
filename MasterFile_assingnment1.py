@@ -88,30 +88,18 @@ regions_coordinates = list(lat_lng_builder(region) for region in regions)
 
 len(regions_coordinates)
 
-
-# lat_lng_builder(regions[5])
-# print(regions_coordinates)
-
-fig_layout=folium.Figure(height=350,width=550)
-map_main=folium.Map(location= lat_lng_builder("University of Edinburgh Business School, 29 Buccleuch Place ,Edinburgh"),tiles='cartodbpositron',zoom_start=8)
-fig_layout.add_child(map_main)
-custom_icon = folium.DivIcon(html='<i class="fas fa-person-dress fa-2x"></i>', icon_size=(30, 30))
-
-
-for index, nhslocs in enumerate(regions_coordinates):
-    folium.Marker(location = nhslocs, popup = f"""
-    <h1> {regions[index]}</h1><br>
-   <h2> Number of Staff{staff_count[index]} </h2><br>
-   <h2> Area in Km^2{area_in_km2[index]}""").add_to(map_main)
-
-map_main.show_in_browser()
-
-# regions[1]
-
 regions_coordinates[2]
-heat_map_list.clear()
-nhslocs = []
 
+nhslocs = []
+fig_layout=folium.Figure(height=350,width=550)
+map_main = folium.Map(
+    location=lat_lng_builder("University of Edinburgh Business School, 29 Buccleuch Place, Edinburgh"),
+    tiles='cartodbpositron',
+    zoom_start=5,
+    zoom_control=False,  # Set to True if you want zoom control on the map
+    scrollWheelZoom=False  # Set to True if you want to enable zoom with the mouse scroll wheel
+)
+fig_layout.add_child(map_main)
 
 
 combined_list = []
@@ -120,7 +108,14 @@ for index, (nhslocs, staff) in enumerate(zip(regions_coordinates, staff_per_area
     combined_list = nhslocs + [staff]
     HeatMap([combined_list]).add_to(map_main)
 
+for index, nhslocs in enumerate(regions_coordinates):
+    folium.Marker(location = nhslocs,
+                  icon = folium.CustomIcon(icon_image=("https://cdn.freebiesupply.com/logos/large/2x/nhs-1-logo-png-transparent.png"),icon_size = (20,20)),popup = f"""
+    <h1> {regions[index]}</h1><br>
+   <h2> Number of Staff{staff_count[index]} </h2><br>
+   <h2> Area in Km^2{area_in_km2[index]}""").add_to(map_main)
 
+map_main.show_in_browser()
 map_main.show_in_browser()
 
 
